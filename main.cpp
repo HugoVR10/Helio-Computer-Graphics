@@ -1,10 +1,9 @@
 //
-// Archivo:     micubo.c
-// Autor:       Mateo Díaz
-// Creado:      4/25/2012
-// Proyecto:    código fuente para hacer un cubo en OpenGL
-// Descripción: crear una ventana OpenGL y dibujar un cubo 3D
-//                que el usuario pueda rotar con las teclas de flecha 
+// Autor:       
+// Creado:      
+// Proyecto:    
+// Descripción:	
+//              
 // 
 // Controles:    Flecha izquierda: rotar a la izquierda
 //               Flecha derecha: rotar a la derecha  
@@ -36,6 +35,28 @@ void specialKeys();
 double rotate_y = 0;
 double rotate_x = 0;
 
+void illumination() {
+	// RGB Luz Halogeno 255, 241, 224
+	// RGB Luz Solar 255, 255, 251
+
+	GLfloat diffuseMaterial[4] = { 0.5, 0.5, 0.5, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialf(GL_FRONT, GL_SHININESS, 25.0);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+}
+
 // ----------------------------------------------------------
 // Función de retrollamada “display()”
 // ----------------------------------------------------------
@@ -47,153 +68,327 @@ void display() {
 	// Resetear transformaciones
 	glLoadIdentity();
 
-	// Otras transformaciones
-	// glTranslatef( 0.1, 0.0, 0.0 );      // No incluido
-	// glRotatef( 180, 0.0, 1.0, 0.0 );    // No incluido
-
 	// Rotar cuando el usuario cambie “rotate_x” y “rotate_y”
 	glRotatef(rotate_x, 1.0, 0.0, 0.0);
 	glRotatef(rotate_y, 0.0, 1.0, 0.0);
 
-	// Otras transformaciones
-	// glScalef( 2.0, 2.0, 0.0 );          // No incluido
+	// ----------------------------------------------------------
+	// Seccion I
+	// ----------------------------------------------------------
+	//glViewport(0, 200, 400, 200);
 
-	//LADO FRONTAL: lado multicolor
+	glColorMaterial(GL_FRONT, GL_EMISSION);
+	glEnable(GL_COLOR_MATERIAL);
+	glBegin(GL_QUADS);
+	
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f( -0.8125, -0.50, -0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f( -0.8125,  0.50, -0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f( -0.9375,  0.50, -0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f( -0.9375, -0.50, -0.25);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.5625,  0.50, -0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.5625,  0.25, -0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.6875,  0.25, -0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.6875,  0.50, -0.25);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.5625, -0.25, 0.0);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.5625,  0.0, 0.0);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.6875,  0.0, 0.0);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.6875, -0.25, 0.0);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.5625, 0.50, 0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.5625, 0.0,  0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.6875, 0.0,  0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.6875, 0.50, 0.25);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.8125, -0.50, -0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.8125, -0.25, -0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.8125, -0.25,  0.0);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.8125, -0.50,  0.0);      
+	
+	glColor3f(1.0, 0.563, 0.0);   glVertex3f(-0.6875, 0.50, -0.25);
+	glColor3f(1.0, 0.390, 0.0);      glVertex3f(-0.6875, 0.25, -0.25);
+	glColor3f(1.0, 0.601, 0.153);      glVertex3f(-0.6875, 0.25, 0.0);
+	glColor3f(1.0, 0.627, 0.0);      glVertex3f(-0.6875, 0.50, 0.0);
+	
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-1.0, -0.25, -0.125);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-1.0, -0.00, -0.125);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-1.0, -0.00, 0.5);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-1.0, -0.25, 0.5);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.5625, 0.25, -0.25);     
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.5625, 0.00, -0.25);    
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.5625, 0.00, 0.0);       
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.5625, 0.25, 0.0);       
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.5625, 0.50, 0.25);     
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.5625, 0.00, 0.25);    
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.5625, 0.00, 0.375);       
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.5625, 0.50, 0.375);       
+	
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.5625, 0.0, 0.0);     
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.5625, -0.25, 0.0);    
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.5625, -0.25, 0.125);       
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.5625, 0.0, 0.125);       
+																         
+	glEnd();
+
+	// ----------------------------------------------------------
+	// Seccion II
+	// ----------------------------------------------------------
+
+	glColorMaterial(GL_FRONT, GL_EMISSION);
+	glEnable(GL_COLOR_MATERIAL);
 	glBegin(GL_QUADS);
 
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.8125, -0.50, -0.25);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.8125, 0.50, -0.25);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.9375, 0.50, -0.25);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.9375, -0.50, -0.25);      // P4 es morado
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.500,  0.00, -0.125);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.500,  0.25, -0.125);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.375,  0.25, -0.125);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.375,  0.00, -0.125);      
 
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.5625, 0.50, -0.25);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.5625, 0.25, -0.25);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.6875, 0.25, -0.25);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.6875, 0.50, -0.25);      // P4 es morado
+	glColor3f(1.0, 0.563, 0.0);    glVertex3f(-0.500, 0.00, -0.00);      
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.500, 0.25, -0.00);     
+	glColor3f(1.0, 0.627, 0.0);    glVertex3f(-0.375, 0.25, -0.00);      
+	glColor3f(1.0, 0.601, 0.153);     glVertex3f(-0.375, 0.00, -0.00);      
 
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.5625, -0.25, 0.0);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.5625, 0.0, 0.0);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.6875, 0.0, 0.0);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.6875, -0.25, 0.0);      // P4 es morado
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.500, 0.00, -0.125);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.500, 0.25, -0.125);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.500, 0.25, -0.00);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.500, 0.00, -0.00);      
 
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.5625, 0.50, 0.25);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.5625, 0.0, 0.25);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.6875, 0.0, 0.25);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.6875, 0.50, 0.25);      // P4 es morado
-
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.8125, -0.50, -0.25);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.8125, -0.25, -0.25);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.8125, -0.25, 0.0);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.8125, -0.50, 0.0);      // P4 es morado
-
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.6875, 0.50, -0.25);     // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.6875, 0.25, -0.25);     // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.6875, 0.25, 0.0);       // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.6875, 0.50, 0.0);       // P4 es morado
-
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-1.0, -0.25, -0.125);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-1.0, -0.00, -0.125);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-1.0, -0.00, 0.5);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-1.0, -0.25, 0.5);      // P4 es morado
-
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.5625, 0.25, -0.25);     // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.5625, 0.00, -0.25);     // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.5625, 0.00, 0.0);       // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.5625, 0.25, 0.0);       // P4 es morado
-
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.5625, 0.50, 0.25);     // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.5625, 0.00, 0.25);     // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.5625, 0.00, 0.375);       // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.5625, 0.50, 0.375);       // P4 es morado
+	glColor3f(1.0, 0.563, 0.0);      glVertex3f(-0.375, 0.00, -0.125);      
+	glColor3f(1.0, 0.390, 0.0);      glVertex3f(-0.375, 0.25, -0.125);     
+	glColor3f(1.0, 0.627, 0.0);      glVertex3f(-0.375, 0.25, -0.00);      
+	glColor3f(1.0, 0.601, 0.153);     glVertex3f(-0.375, 0.00, -0.00);      
 
 
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(-0.5625, 0.0, 0.0);     // P1 es rojo
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(-0.5625, -0.25, 0.0);     // P2 es verde
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.5625, -0.25, 0.125);       // P3 es azul
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.5625, 0.0, 0.125);       // P4 es morado
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.375, -0.25, -0.0);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.375, -0.50, -0.0);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(-0.250, -0.50, -0.0);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(-0.250, -0.25, -0.0);      
 
+	glColor3f(1.0, 0.563, 0.0);      glVertex3f(-0.375, -0.25,  0.25);      
+	glColor3f(1.0, 0.390, 0.0);      glVertex3f(-0.375, -0.50,  0.25);     
+	glColor3f(1.0, 0.627, 0.0);      glVertex3f(-0.375, -0.50, -0.00);      
+	glColor3f(1.0, 0.601, 0.153);     glVertex3f(-0.375, -0.25, -0.00);      
 
-	/*
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f( 0.125, 0.0, -0.25);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f( 0.125, 0.5, -0.25);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.125, 0.5, -0.25);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.125, 0.0, -0.25);      // P4 es morado
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.00, -0.25, 0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.00, -0.50, 0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.25, -0.50, 0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.25, -0.25, 0.25);      
 
-	glColor3f(1.0, 0.0, 0.0);     glVertex3f(0.125, 0.0,  -0.0);      // P1 es rojo
-	glColor3f(0.0, 1.0, 0.0);     glVertex3f(0.125, 0.5,  -0.0);      // P2 es verde
-	glColor3f(0.0, 0.0, 1.0);     glVertex3f(-0.125, 0.5, -0.0);      // P3 es azul
-	glColor3f(1.0, 0.0, 1.0);     glVertex3f(-0.125, 0.0, -0.0);      // P4 es morado
-	*/
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(-0.125, 0.00, -0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(-0.125, 0.50, -0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.25,  0.50, -0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.25, 0.00, -0.25);      
 
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.125, 0.50, 0.0);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.125, -0.50, 0.0);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.25, -0.50,  0.0);    
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.25, 0.50,  0.0);    
+
+	glColor3f(1.0, 0.563, 0.0);      glVertex3f(0.25, 0.00, -0.00);      
+	glColor3f(1.0, 0.390, 0.0);      glVertex3f(0.25, -0.25, -0.00);     
+	glColor3f(1.0, 0.627, 0.0);      glVertex3f(0.25, -0.25, 0.25);      
+	glColor3f(1.0, 0.601, 0.153);     glVertex3f(0.25, 0.00, 0.25);      
+
+	glColor3f(1.0, 0.563, 0.0);      glVertex3f(-0.25, 0.00, -0.00);      
+	glColor3f(1.0, 0.390, 0.0);      glVertex3f(-0.25, -0.25, -0.00);     
+	glColor3f(1.0, 0.627, 0.0);      glVertex3f(-0.25, -0.25, -0.25);      
+	glColor3f(1.0, 0.601, 0.153);     glVertex3f(-0.25, 0.00, -0.25);      
+											 
 
 	glEnd();
 
-	// LADO TRASERO: lado blanco
-	/*glBegin(GL_POLYGON);
-	glColor3f(1.0, 1.0, 1.0);
-	glVertex3f(0.5, -0.5, 0.5);
-	glVertex3f(0.5, 0.5, 0.5);
-	glVertex3f(-0.5, 0.5, 0.5);
-	glVertex3f(-0.5, -0.5, 0.5);
-	glEnd();
+	// ----------------------------------------------------------
+	// Seccion III
+	// ----------------------------------------------------------
 
-	// LADO DERECHO: lado morado
-	glBegin(GL_POLYGON);
-	glColor3f(1.0, 0.0, 1.0);
-	glVertex3f(0.5, -0.5, -0.5);
-	glVertex3f(0.5, 0.5, -0.5);
-	glVertex3f(0.5, 0.5, 0.5);
-	glVertex3f(0.5, -0.5, 0.5);
-	glEnd();
-
-	// LADO IZQUIERDO: lado verde
-	glBegin(GL_POLYGON);
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(-0.5, -0.5, 0.5);
-	glVertex3f(-0.5, 0.5, 0.5);
-	glVertex3f(-0.5, 0.5, -0.5);
-	glVertex3f(-0.5, -0.5, -0.5);
-	glEnd();
-
-	// LADO SUPERIOR: lado azul
-	glBegin(GL_POLYGON);
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(0.5, 0.5, 0.5);
-	glVertex3f(0.5, 0.5, -0.5);
-	glVertex3f(-0.5, 0.5, -0.5);
-	glVertex3f(-0.5, 0.5, 0.5);
-	glEnd();*/
-
-	// LADO INFERIOR: lado rojo
+	glColorMaterial(GL_FRONT, GL_EMISSION);
+	glEnable(GL_COLOR_MATERIAL);
 	glBegin(GL_QUADS);
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.9375, -0.50, -0.5);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.9375, -0.25, -0.5);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.9375, -0.25,  0.125);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.9375, -0.50,  0.125);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.9375, -0.25, 0.125);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.9375, -0.00, 0.125);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.9375, -0.00, 0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.9375, -0.25, 0.25);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.9375, -0.25,  -0.5);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.9375, -0.00, -0.5);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.9375, -0.00, -0.375);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.9375, -0.25, -0.375);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.5, -0.50, -0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.5, -0.25, -0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.5, -0.25,  0.0);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.5, -0.50,  0.0);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.5, -0.25, -0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.5, -0.00, -0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.5, -0.00, -0.125);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.5, -0.25, -0.125);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.5, 0.0,  -0.5);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.5, 0.25, -0.5);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.5, 0.25,  0.125);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.5, 0.0,   0.125);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.5, -0.25, 0.0);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.5, -0.00, 0.0);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.5, -0.00, 0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.5, -0.25, 0.25);      
+
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.8125, -0.50, 0.25);      
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.8125, -0.00,  0.25);     
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.9375, -0.00,  0.25);      
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.9375, -0.50, 0.25);      
+
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.8125, -0.50, 0.125);      
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.8125, -0.00, 0.125);     
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.9375, -0.00, 0.125);      
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.9375, -0.50, 0.125);      
+
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.8125, -0.25, -0.5);      
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.8125, -0.00, -0.5);     
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.9375, -0.00, -0.5);      
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.9375, -0.25, -0.5);      
+
+	glColor3f(1.0, 0.563, 0.0);     glVertex3f(0.5, 0.00, -0.5);      
+	glColor3f(1.0, 0.390, 0.0);     glVertex3f(0.5, 0.25, -0.5);     
+	glColor3f(1.0, 0.627, 0.0);     glVertex3f(0.8125, 0.25, -0.5);      
+	glColor3f(1.0, 0.601, 0.153);    glVertex3f(0.8125, 0.00, -0.5);      
+
+	glEnd();
+
+
+	
+
+
+	// ----------------------------------------------------------
+	// Bases
+	// ----------------------------------------------------------
+
+	glColorMaterial(GL_FRONT, GL_EMISSION);
+	glEnable(GL_COLOR_MATERIAL);
+	glBegin(GL_QUADS);
+
+	// PISO
 	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(1.0, -0.75, -0.5);
-	glVertex3f(1.0, -0.75, 0.5);
-	glVertex3f(-1.0, -0.75, 0.5);
-	glVertex3f(-1.0, -0.75, -0.5);
+
+	glVertex3f( 0.5, -0.70, -0.75);
+	glVertex3f( 0.5, -0.70, -0.25);
+	glVertex3f(-1.0 , -0.70, -0.25);
+	glVertex3f(-1.0 , -0.70, -0.75);
+
+	glVertex3f(1.0, -0.70, -0.75);
+	glVertex3f(1.0, -0.70, -0.50);
+	glVertex3f(0.5, -0.70, -0.50);
+	glVertex3f(0.5, -0.70, -0.75);
+
+	glVertex3f(-1.0, -0.70, 0.75);
+	glVertex3f(-1.0, -0.70, 0.50);
+	glVertex3f(-0.5, -0.70, 0.50);
+	glVertex3f(-0.5, -0.70, 0.75);
+
+	glVertex3f(-0.5, -0.70,  0.75);
+	glVertex3f(-0.5, -0.70,  0.25);
+	glVertex3f(1.0, -0.70, 0.25);
+	glVertex3f(1.0, -0.70, 0.75);
+
+	glVertex3f(-1.0, -0.70,  0.75);
+	glVertex3f(-1.0, -0.70, -0.75);
+	glVertex3f(-1.25, -0.70,-0.75);
+	glVertex3f(-1.25, -0.70, 0.75);
+
+	glVertex3f(1.0, -0.70, 0.75);
+	glVertex3f(1.0, -0.70, -0.75);
+	glVertex3f(1.25, -0.70, -0.75);
+	glVertex3f(1.25, -0.70, 0.75);
 
 	//SECCION 1
-	glColor3f(0.0, 0.0, 1.0);
+	glColor3f(0.354, 1.0, 0.109);
+	glVertex3f(-1.0,  -0.75, -0.25);
+	glVertex3f(-1.0,  -0.75,  0.5 );
+	glVertex3f(-0.5,  -0.75,  0.5 );
+	glVertex3f(-0.5,  -0.75, -0.25);
+
+	//SECCION 2
+	glColor3f(0.354, 1.0, 0.109);
+	glVertex3f(1.0, -0.75, -0.5);
+	glVertex3f(1.0, -0.75,  0.25);
+	glVertex3f(0.5, -0.75,  0.25);
+	glVertex3f(0.5, -0.75, -0.5);
+
+	//SECCION 3
+	glColor3f(0.354, 1.0, 0.109);
+	glVertex3f(-0.5, -0.75, -0.25);
+	glVertex3f(-0.5, -0.75, 0.25);
+	glVertex3f(0.5,  -0.75, 0.25);
+	glVertex3f(0.5,  -0.75, -0.25);
+
+	// ----------------------------------------------------------
+	// Seccion I
+	// ----------------------------------------------------------
+	glColor3f(0.354, 0.229, 0.109); //139,90,43
+
+	glVertex3f(-1.0, -0.75, -0.25);
+	glVertex3f(-1.0, -0.75,  0.50);
+	glVertex3f(-1.0, -0.70, 0.50);
 	glVertex3f(-1.0, -0.70, -0.25);
-	glVertex3f(-1.0, -0.70, 0.5);
-	glVertex3f(-0.5, -0.70, 0.5);
-	glVertex3f(-0.5, -0.70, -0.25);
 
-	//SECCION 2
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(1.0, -0.70, -0.5);
-	glVertex3f(1.0, -0.70, 0.25);
-	glVertex3f(0.5, -0.70, 0.25);
-	glVertex3f(0.5, -0.70, -0.5);
-
-	//SECCION 2
-	glColor3f(0.0, 1.0, 1.0);
-	glVertex3f(-0.5, -0.70, -0.25);
+	glVertex3f(-0.5, -0.75, 0.25);
+	glVertex3f(-0.5, -0.75, 0.50);
+	glVertex3f(-0.5, -0.70, 0.50);
 	glVertex3f(-0.5, -0.70, 0.25);
-	glVertex3f(0.5, -0.70, 0.25);
+
+	glVertex3f(-0.5, -0.75, 0.50);
+	glVertex3f(-1.0, -0.75, 0.50);
+	glVertex3f(-1.0, -0.70, 0.50);
+	glVertex3f(-0.5, -0.70, 0.50);
+
+	glVertex3f(0.5, -0.75,  -0.25);
+	glVertex3f(-1.0, -0.75, -0.25);
+	glVertex3f(-1.0, -0.70, -0.25);
+	glVertex3f(0.5, -0.70,  -0.25);
+
+	glVertex3f(1.0, -0.75,  0.25);
+	glVertex3f(-0.5, -0.75, 0.25);
+	glVertex3f(-0.5, -0.70, 0.25);
+	glVertex3f(1.0, -0.70,  0.25);
+
+	glVertex3f(1.0, -0.75, -0.50);
+	glVertex3f(1.0, -0.75,  0.25);
+	glVertex3f(1.0, -0.70,  0.25);
+	glVertex3f(1.0, -0.70, -0.50);
+
+	glVertex3f(0.5, -0.75, -0.50);
+	glVertex3f(0.5, -0.75, -0.25);
 	glVertex3f(0.5, -0.70, -0.25);
+	glVertex3f(0.5, -0.70, -0.50);
+
+	glVertex3f(1.0, -0.75,  -0.50);
+	glVertex3f(0.5, -0.75, -0.50);
+	glVertex3f(0.5, -0.70, -0.50);
+	glVertex3f(1.0, -0.70,  -0.50);
 
 	glEnd();
+
+	//glViewport(0, 0, 400, 200);
+
+	// Cubo Rectangular transparente
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glTranslatef(-0.125, -0.25, 0.0);
+	glColor4f(1.0, 1.0, 1.0, 0.4);
+	glutSolidCube(0.25);
+	glDisable(GL_BLEND);
+
+
 
 	glFlush();
 	glutSwapBuffers();
@@ -208,7 +403,7 @@ void specialKeys(int key, int x, int y) {
 	//  Flecha derecha: aumentar rotación 5 grados
 	if (key == GLUT_KEY_RIGHT)
 		rotate_y += 5;
-
+		
 
 	//  Flecha izquierda: disminuir rotación 5 grados
 	else if (key == GLUT_KEY_LEFT)
@@ -242,8 +437,10 @@ int main(int argc, char* argv[]) {
 	// Crear ventana
 	glutInitWindowPosition(10, 10);
 	glutInitWindowSize(1200, 600);
-	glutCreateWindow("Cubo asombroso");
-
+	glutCreateWindow("Helio Oiticica");
+	
+	// Habilita la iluminación en la escena
+	illumination();
 
 	//  Habilitar la prueba de profundidad de Z-buffer
 	glEnable(GL_DEPTH_TEST);
